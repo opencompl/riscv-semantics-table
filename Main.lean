@@ -5,6 +5,7 @@ Authors: Scott Morrison
 -/
 import Lean.CoreM
 import Lean4Checker.Lean
+import Init.Data.String.Basic
 
 open Lean
 
@@ -120,14 +121,39 @@ unsafe def diffEnvironments (module : Name) (act : Environment → Environment �
     Lean.withImportModules (after.importsOf module) {} 0 fun before =>
       act before after
 
+-- TODO: this list should be retrieved automatically from the RISCV dialect semantics
+def functionNames : Array String := #["ADDIW"]
+
+open Lean in
+/-- O(n^2) substring search, where we check if 'pat' occurs in 's'. -/
+partial def _root_.String.containsSubstr? (s pat : String) : Bool :=
+  -- empty string is subtring of itself.
+  if s.length == 0 then
+    pat.length == 0
+  else
+    if pat.isPrefixOf s
+    then True
+    else (s.drop 1).containsSubstr? pat
+
+
+open Lean in
 unsafe def replay (module : Name) : IO Unit := do
   diffEnvironments module fun before after => do
     let newConstants := after.constants.map₁.toList.filter
       -- We skip unsafe constants, and also partial constants. Later we may want to handle partial constants.
       fun ⟨n, ci⟩ => !before.constants.map₁.contains n && !ci.isUnsafe && !ci.isPartial
-    M.run before (HashMap.ofList newConstants) do
-      for (n, _) in newConstants do
-        replayConstant n
+    for (constName, constInfo) in newConstants do
+      IO.println "--"
+      IO.println constName
+      if let .ctorInfo info := constInfo then
+        for fn in functionNames do
+          -- info is ConstructorVal
+          let haveThm? := info.name.toString.containsSubstr? fn
+          if haveThm? then
+            IO.println s!"* {constName} is a constructor of '{info.name}'"
+    -- M.run before (HashMap.ofList newConstants) do
+    --   for (n, _) in newConstants do
+    --     replayConstant n
 
 /--
 Run as e.g. `lake exe lean4checker Mathlib.Data.Nat.Basic`.
