@@ -142,15 +142,16 @@ unsafe def replay (module : Name) : IO Unit := do
     let newConstants := after.constants.map₁.toList.filter
       -- We skip unsafe constants, and also partial constants. Later we may want to handle partial constants.
       fun ⟨n, ci⟩ => !before.constants.map₁.contains n && !ci.isUnsafe && !ci.isPartial
-    for (constName, constInfo) in newConstants do
-      IO.println "--"
-      IO.println constName
-      if let .ctorInfo info := constInfo then
-        for fn in functionNames do
-          -- info is ConstructorVal
-          let haveThm? := info.name.toString.containsSubstr? fn
-          if haveThm? then
-            IO.println s!"* {constName} is a constructor of '{info.name}'"
+    for (constName, _constInfo) in newConstants do
+      if constName = "ast" then
+        IO.println "--"
+        IO.println constName
+      -- if let .ctorInfo info := constInfo then
+      --   for fn in functionNames do
+      --     -- info is ConstructorVal
+      --     let haveThm? := info.name.toString.containsSubstr? fn
+      --     if haveThm? then
+      --       IO.println s!"* {constName} is a constructor of '{info.name}'"
     -- M.run before (HashMap.ofList newConstants) do
     --   for (n, _) in newConstants do
     --     replayConstant n

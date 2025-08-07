@@ -1,0 +1,7 @@
+[submodule "sail-riscv-lean"]
+	path = sail-riscv-lean
+	url = https://github.com/opencompl/sail-riscv-lean.git
+
+[submodule "lean-mlir"]
+	path = lean-mlir
+	url = https://github.com/opencompl/lean-mlir.git
