@@ -18,3 +18,13 @@ supportInterpreter = true
 [[lean_exe]]
 name = "lean4checker_test"
 root = "Lean4CheckerTests.TestDriver"
+
+[[require]]
+name = "Lean_RV64D"
+git = "https://github.com/opencompl/sail-riscv-lean"
+rev = "lean-2025-08-02"
+
+[[require]]
+name = "SSA"
+git = "https://github.com/opencompl/lean-mlir"
+rev = "auto-mathlib-update-2025-08-02"

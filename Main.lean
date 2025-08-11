@@ -44,7 +44,6 @@ def getCurrentModule : IO Name := do
     -- `← getRootPackage` from `Lake`, but I can't make that work with the monads involved.
     return manifest.name.capitalize
 
-
 /--
 Run as e.g. `lake exe lean4checker` to check everything in the current project.
 or e.g. `lake exe lean4checker Mathlib.Data.Nat` to check everything with module name
