@@ -8,6 +8,8 @@ import Lean.Replay
 import Lean4Checker.Lean
 import Lean4Checker.Replay
 import Lake.Load.Manifest
+import LeanRV64D
+import SSA.Projects.RISCV64.Semantics
 
 open Lean
 

@@ -14,6 +14,7 @@ globs = ["Lean4CheckerTests.*"]
 name = "lean4checker"
 root = "Main"
 supportInterpreter = true
+dependencies = ["Lean_RV64D"]
 
 [[lean_exe]]
 name = "lean4checker_test"
