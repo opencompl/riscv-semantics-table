@@ -16,13 +16,11 @@ open Lean Elab Meta in
           isUnsafe := false
         })
     }
-  let kenv := Lean.Kernel.Environment.mk consts
-    env.toKernelEnv.quotInit
-    env.toKernelEnv.diagnostics
-    env.toKernelEnv.const2ModIdx
-    (Lean.Kernel.Environment.extensions env.toKernelEnv)
-    {} {}
-    env.header
+  let kenv := Lean.Kernel.Environment.mk (constants := consts) (quotInit := env.toKernelEnv.quotInit)
+              (diagnostics := env.toKernelEnv.diagnostics) (const2ModIdx := env.toKernelEnv.const2ModIdx)
+              (irBaseExts := {})
+              (extensions := Lean.Kernel.Environment.extensions env.toKernelEnv)
+              (header:= env.header)
   Lean.Environment.setCheckedSync env kenv
 
 theorem efsq : ∀ (x y z n : Nat),
